@@ -1,0 +1,21 @@
+{
+  "ValidUsernames": [
+    "standard_user",
+    "problem_user",
+    "performance_glitch_user",
+    "error_user",
+    "visual_user"
+  ],
+  "InvalidUsernames": [
+    "",
+    "wrong_user",
+    "invalid_user"
+  ],
+  "ValidPasswords": [
+    "secret_sauce"
+  ],
+  "InvalidPasswords": [
+    "",
+    "wrong_password"
+  ]
+}
