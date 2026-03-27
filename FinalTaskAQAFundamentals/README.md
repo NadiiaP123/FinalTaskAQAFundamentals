@@ -11,7 +11,7 @@ The framework supports parallel execution and multiple browsers.
 
 - Site for testing: https://www.saucedemo.com
 
-## 1. Automate following test cases:
+### 1. Automate following test cases:
 
 ### UC-1 Test Login form with only Username provided:
 
@@ -82,7 +82,7 @@ The framework supports parallel execution and multiple browsers.
  and choose the desired .runsettings file.
 
 
- # 3. Run specific test:
+ ### 3. Run specific test:
  
  - Overview of available tests:
  
@@ -165,7 +165,6 @@ FinalTaskAQAFundamentals
     ├── Parallel.runsettings      # Parallel execution settings
     ├── Sequential.runsettings    # Sequential execution settings
     └── README.md                 # Project documentation
-...
 ```
 
  ### Logging
