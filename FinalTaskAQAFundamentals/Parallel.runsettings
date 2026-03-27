@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RunSettings>
-  <RunConfiguration>
-    <MaxCpuCount>4</MaxCpuCount>
-  </RunConfiguration>
-  <NUnit>
-    <NumberOfTestWorkers>4</NumberOfTestWorkers>
-  </NUnit>
+
+	<RunConfiguration>
+		<MaxCpuCount>4</MaxCpuCount>
+	</RunConfiguration>
+
+	<NUnit>
+		<NumberOfTestWorkers>4</NumberOfTestWorkers>
+	</NUnit>
+
+	<TestRunParameters>
+		<Parameter name="RunMode" value="Parallel" />
+	</TestRunParameters>
+
 </RunSettings>

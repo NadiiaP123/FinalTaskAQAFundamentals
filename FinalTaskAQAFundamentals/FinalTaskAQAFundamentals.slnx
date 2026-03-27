@@ -1,6 +1,8 @@
 <Solution>
   <Folder Name="/Solution Items/">
+    <File Path="Parallel.runsettings" />
     <File Path="README.md" />
+    <File Path="Sequential.runsettings" />
   </Folder>
   <Project Path="../Core/Core.csproj" />
   <Project Path="../Pages/Pages.csproj" />

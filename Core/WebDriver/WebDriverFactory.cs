@@ -1,23 +1,23 @@
 ﻿using Core.Config;
+using log4net;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Chromium;
 using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
 
 namespace Core.WebDriver
 {
-
     /// <summary>
-    /// Creates and manages per-thread IWebDriver instances.
-    /// Distributes browsers for parallel execution and applies configuration
-    /// from appsettings.json (browser type, headless mode, timeouts).
+    /// Static factory for creating and managing thread-local IWebDriver instances.
+    /// Configures browser settings (type, headless mode, timeouts) from ConfigLoader.Settings.
+    /// Supports Chrome, Firefox, and Edge browsers.
     /// </summary>
     public static class WebDriverFactory
     {
-        private static readonly List<BrowserType> _browserPool = BuildBrowserPool();
-        private static int _browserIndex = -1;
-        private static readonly ThreadLocal<IWebDriver?> _driver = new();
+        private static readonly ILog Log = LogManager.GetLogger(typeof(WebDriverFactory));
 
+        private static readonly ThreadLocal<IWebDriver?> _driver = new();
 
         public static IEnumerable<BrowserType> GetEnabledBrowsers()
         {
@@ -34,68 +34,39 @@ namespace Core.WebDriver
         {
             if (_driver.Value == null)
             {
-                throw new InvalidOperationException("WebDriver is not initialized for the current thread.");
+                throw new InvalidOperationException("WebDriver is not initialized. Call InitDriver() first.");
             }
 
             return _driver.Value;
         }
 
-        private static List<BrowserType> BuildBrowserPool()
+        public static void InitDriver(BrowserType browserType)
         {
-            var browserList = new List<BrowserType>();
-            foreach (var browser in ConfigLoader.Settings.BrowserTypes)
-            {
-                if (browser.Value.Enabled)
-                {
-                    browserList.AddRange(Enumerable.Repeat(browser.Key, browser.Value.Instances));
-                }
-            }
-
-            return browserList;
-        }
-
-
-        private static BrowserType GetNextBrowser()
-        {
-            if (_browserPool.Count == 0)
-            {
-                throw new InvalidOperationException("Browser pool is empty.");
-            }
-            var index = Interlocked.Increment(ref _browserIndex);
-
-            var browser = _browserPool[index % _browserPool.Count];
-
-            return browser;
-        }
-
-
-        public static void InitDriver()
-        {
-            var browser = GetNextBrowser();
-
-            var driver = CreateDriver(browser);
-
-            _driver.Value = driver;
+            _driver.Value = CreateDriver(browserType);
         }
 
         private static IWebDriver CreateDriver(BrowserType browserType)
         {
             var driver = browserType switch
             {
+                BrowserType.Firefox => CreateFirefoxDriver(),             
                 BrowserType.Chrome => CreateChromeDriver(),
-                BrowserType.Edge => CreateEdgeDriver(),
-                BrowserType.Firefox => CreateFirefoxDriver(),
+                BrowserType.Edge => CreateEdgeDriver(),             
                 _ => throw new ArgumentOutOfRangeException(nameof(browserType))
             };
 
             ApplyTimeouts(driver);
+
+            bool headless = ConfigLoader.Settings.BrowserTypes[browserType].Headless;      
+            Log.InfoFormat("New {0}Driver is created.", browserType);
+            Log.InfoFormat("HEADLESS MODE = {0}.", headless);
+
             return driver;
         }
 
         private static IWebDriver CreateChromeDriver()
         {
             var options = new ChromeOptions();
-
             var settings = ConfigLoader.Settings.BrowserTypes[BrowserType.Chrome];
 
             if (settings.Headless)
@@ -103,13 +74,14 @@ namespace Core.WebDriver
                 options.AddArgument("--headless=new");
             }
 
+            ApplyChromiumOptions(options);
+            options.AddArgument("--start-maximized");
             return new ChromeDriver(options);
         }
 
         private static IWebDriver CreateEdgeDriver()
         {
             var options = new EdgeOptions();
-
             var settings = ConfigLoader.Settings.BrowserTypes[BrowserType.Edge];
 
             if (settings.Headless)
@@ -117,13 +89,15 @@ namespace Core.WebDriver
                 options.AddArgument("--headless=new");
             }
 
+            ApplyChromiumOptions(options);
+            options.AddArgument("start-maximized");
+
             return new EdgeDriver(options);
         }
 
         private static IWebDriver CreateFirefoxDriver()
         {
             var options = new FirefoxOptions();
-
             var settings = ConfigLoader.Settings.BrowserTypes[BrowserType.Firefox];
 
             if (settings.Headless)
@@ -131,7 +105,15 @@ namespace Core.WebDriver
                 options.AddArgument("--headless");
             }
 
-            return new FirefoxDriver(options);
+            options.SetPreference("signon.rememberSignons", false);
+            options.SetPreference("dom.webnotifications.enabled", false);
+            options.SetPreference("dom.push.enabled", false);
+            options.SetPreference("intl.accept_languages", "en,en-US");
+
+            var driver = new FirefoxDriver(options);
+            driver.Manage().Window.Maximize();
+
+            return driver;
         }
 
         private static void ApplyTimeouts(IWebDriver driver)
@@ -148,7 +130,6 @@ namespace Core.WebDriver
             {
                 return;
             }
-
             try
             {
                 _driver.Value.Quit();
@@ -157,6 +138,14 @@ namespace Core.WebDriver
             {
                 _driver.Value = null;
             }
+        }
+
+        private static void ApplyChromiumOptions(ChromiumOptions options)
+        {
+            options.AddUserProfilePreference("credentials_enable_service", false);
+            options.AddUserProfilePreference("profile.password_manager_enabled", false);
+            options.AddArgument("--guest");
+            options.AddArgument("--lang=en");
         }
     }
 }

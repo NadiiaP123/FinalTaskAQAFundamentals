@@ -1,16 +1,13 @@
 ﻿using Core.Utilities;
 using Core.WebDriver;
 using OpenQA.Selenium;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Pages
 {
     public abstract class BasePage
     {
         protected IWebDriver Driver { get; }
-        protected abstract string PageUrl { get; }
+        public abstract string PageUrl { get; }
 
         protected BasePage()
         {
@@ -24,12 +21,17 @@ namespace Pages
 
         public abstract bool IsOpened();
 
-        protected IWebElement Find(By locator)
+        public IWebElement Find(By locator)
         {
-            return WaitHelper.WaitUntilVisible(Driver, locator);
+            return WaitHelper.WaitOneUntilVisible(Driver, locator);
         }
 
-        protected void Click(By locator)
+        protected IReadOnlyList<IWebElement> FindAll(By locator)
+        {
+            return WaitHelper.WaitGroupUntilVisible(Driver, locator);
+        }
+
+        public void Click(By locator)
         {
             Find(locator).Click();
         }
@@ -45,7 +47,7 @@ namespace Pages
             return Find(locator).Text;
         }
 
-        protected bool IsDisplayed(By locator)
+        public bool IsDisplayed(By locator)
         {
             try
             {
@@ -55,6 +57,11 @@ namespace Pages
             {
                 return false;
             }
+        }
+
+        public void GoBack()
+        {
+            Driver.Navigate().Back();
         }
 
     }
