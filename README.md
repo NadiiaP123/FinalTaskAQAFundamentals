@@ -59,12 +59,15 @@ The framework supports parallel execution and multiple browsers.
 
   - Chrome and Edge are included in the test run in headless mode.
 
-  "Timeouts": {"ImplicitWait": 2, "ExplicitWait": 5, "PageLoad": 10},
-  "Browsers": {
-    "Chrome": {"Enabled": true, "Headless": true},
-    "Edge": {"Enabled": true, "Headless": true}, 
-    "Firefox": {"Enabled": false, "Headless": true}
-   }
+  - Timeouts: 
+  -- ImplicitWait: 2
+  -- ExplicitWait: 5
+  -- PageLoad: 10
+  
+  - Browsers: 
+  -- Chrome: ["Enabled": true, "Headless": true]
+  -- Edge:   ["Enabled": true, "Headless": true]
+  -- Firefox:["Enabled": false, "Headless": true]
 
 
 ### 2. Apply the desired execution mode and run tests:
