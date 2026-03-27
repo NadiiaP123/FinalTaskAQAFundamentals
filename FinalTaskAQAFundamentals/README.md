@@ -1,5 +1,5 @@
 
-###  FINAL TASK - [Fundamentals] Automated Testing in .NET #8
+##  FINAL TASK - [Fundamentals] Automated Testing in .NET #8
 
 This project contains UI automation tests based on three user cases. 
 Tests are implemented using Selenium WebDriver, NUnit and C#.
@@ -7,13 +7,13 @@ The framework supports parallel execution and multiple browsers.
 
 ----------------------------------------------------------------
 
-### TASK DESCRIPTION:
+## TASK DESCRIPTION:
 
 - Site for testing: https://www.saucedemo.com
 
-### 1. Automate following test cases:
+## 1. Automate following test cases:
 
-## UC-1 Test Login form with only Username provided:
+### UC-1 Test Login form with only Username provided:
 
 - Enter any username.
 - Hit the "Login" button
@@ -22,7 +22,7 @@ The framework supports parallel execution and multiple browsers.
 - Click the "Login" button.
 - Verify that an error message "Password is required" appears.
 
-## UC-2 Test Login form with valid credentials:
+### UC-2 Test Login form with valid credentials:
 
 - Enter username for a standard user.
 - Enter a password from the section “Password for all users”.
@@ -33,7 +33,7 @@ The framework supports parallel execution and multiple browsers.
   dropdown with sorting filters; 
   list of inventory items
 
-## UC-3 Test adding products to shopping cart:
+### UC-3 Test adding products to shopping cart:
 
 - Login with standard user.
 - Open details of any product by clicking on it.
@@ -48,9 +48,9 @@ The framework supports parallel execution and multiple browsers.
 
 
 -----------------------------------------------------------------------
-### RUN TESTS:
+## RUN TESTS:
 
-# 1. Configure test parameters using 'Tests/appsettings.json".
+### 1. Configure test parameters using 'Tests/appsettings.json".
  - Set timeouts for Webdriver operations.
  - Make browser enabled to include it in test run.
  - Set headless mode if needed.
@@ -67,7 +67,7 @@ The framework supports parallel execution and multiple browsers.
    }
 
 
-# 2. Apply the desired execution mode and run tests:
+### 2. Apply the desired execution mode and run tests:
  
  - Run all tests in sequential mode:
   
@@ -97,15 +97,15 @@ The framework supports parallel execution and multiple browsers.
  ```dotnet test Tests.csproj --filter "Category=UC1" --settings Sequential.runsettings```
 
 
- # 4.  View log file:
+ ### 4.  View log file:
 
  Check Log records in: FinalTaskAQAFundamentals/bin/Debug/net10.0/logs/test-log.txt
 
 -----------------------------------------------------------------------
 
-### TASK IMPLEMENTATION:
+## TASK IMPLEMENTATION:
 
-## Tech Stack:
+### Tech Stack:
 
 - C#
 - .NET 10
@@ -114,13 +114,13 @@ The framework supports parallel execution and multiple browsers.
 - NUnit
 - Log4Net
 
-## Supported Browsers
+### Supported Browsers
 
 - Chrome
 - Firefox
 - Edge
 
-## Project Structure:
+### Project Structure:
 
 ```text
 FinalTaskAQAFundamentals
@@ -168,7 +168,7 @@ FinalTaskAQAFundamentals
 ...
 ```
 
- ## Logging
+ ### Logging
 
 Logging is implemented using Log4Net.
 By default, every new test run rewrites the existing log file.
