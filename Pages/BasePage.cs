@@ -26,7 +26,7 @@ namespace Pages
             return WaitHelper.WaitOneUntilVisible(Driver, locator);
         }
 
-        protected IReadOnlyList<IWebElement> FindAll(By locator)
+        public IReadOnlyList<IWebElement> FindAll(By locator)
         {
             return WaitHelper.WaitGroupUntilVisible(Driver, locator);
         }
@@ -36,13 +36,23 @@ namespace Pages
             Find(locator).Click();
         }
 
-        protected void Type(By locator, string text)
+        public void ClearInput(By locator)
+        {
+            var element = Driver.FindElement(locator);
+            element.Click();
+            element.SendKeys(Keys.Control + "a");
+            element.SendKeys(Keys.Backspace);
+            element.SendKeys(Keys.Tab);
+        }
+
+        public void Type(By locator, string text)
         {
             var element = Find(locator);
             element.Clear();
             element.SendKeys(text);
         }
-        protected string GetText(By locator)
+
+        public string GetText(By locator)
         {
             return Find(locator).Text;
         }

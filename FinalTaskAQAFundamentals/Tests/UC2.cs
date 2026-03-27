@@ -41,9 +41,10 @@ public class UC2 : BaseTest
     {
         // Act
         Log.Info("Use InventoryPage.IsOpened() method.");
+        bool actual = _inventoryPage.IsOpened();
 
         // Assert
-        Assert.That(_inventoryPage.IsOpened(), Is.True, "InventoryPage is not opened.");
+        Assert.That(actual, Is.True, "InventoryPage is not opened.");
         Log.Info("Assert that after valid login - InventoryPage is opened.");
     }
 
@@ -52,9 +53,10 @@ public class UC2 : BaseTest
     {
         // Act
         Log.Info("Use InventoryPage.IsDisplayed(InventoryPage.BurgerMenuButton) method.");
+        bool actual = _inventoryPage.IsDisplayed(InventoryPage.BurgerMenuButton);
 
         // Assert
-        Assert.That(_inventoryPage.IsDisplayed(InventoryPage.BurgerMenuButton), Is.True, "BurgerMenuButton is not displayed.");
+        Assert.That(actual, Is.True, "BurgerMenuButton is not displayed.");
         Log.Info("Assert that BurgerMenuButton is displayed.");
     }
 
@@ -64,9 +66,10 @@ public class UC2 : BaseTest
     {
         // Act
         Log.Info("Use InventoryPage.IsDisplayed(InventoryPage.SwagLabel) method.");
+        bool actual = _inventoryPage.IsDisplayed(InventoryPage.SwagLabel);
 
         // Assert
-        Assert.That(_inventoryPage.IsDisplayed(InventoryPage.SwagLabel), Is.True, "SwagLabel is not displayed.");
+        Assert.That(actual, Is.True, "SwagLabel is not displayed.");
         Log.Info("Assert that SwagLabel is displayed.");
     }
 
@@ -75,9 +78,10 @@ public class UC2 : BaseTest
     {
         // Act
         Log.InfoFormat("Use InventoryPage.IsDisplayed(InventoryPage.ShoppingCartIcon) method.");
+        bool actual = _inventoryPage.IsDisplayed(InventoryPage.ShoppingCartIcon);
 
         // Assert
-        Assert.That(_inventoryPage.IsDisplayed(InventoryPage.ShoppingCartIcon), Is.True, "ShoppingCartIcon is not displayed.");
+        Assert.That(actual, Is.True, "ShoppingCartIcon is not displayed.");
         Log.Info("Assert that ShoppingCartIcon is displayed.");
     }
 
@@ -86,9 +90,10 @@ public class UC2 : BaseTest
     {
         // Act
         Log.InfoFormat("Use InventoryPage.IsDisplayed(InventoryPage.SortDropdown) method.");
+        bool actual = _inventoryPage.IsDisplayed(InventoryPage.SortDropdown);
 
         // Assert
-        Assert.That(_inventoryPage.IsDisplayed(InventoryPage.SortDropdown), Is.True, "SortDropdown is not displayed.");
+        Assert.That(actual, Is.True, "SortDropdown is not displayed.");
         Log.Info("Assert that SortDropdown is displayed.");
     }
 
@@ -96,9 +101,9 @@ public class UC2 : BaseTest
     public void MainPageContains_NonEmptyInventoryList()
     {
         // Act
-        int visibleItems = _inventoryPage.CountVisibleInventoryItems();
         Log.Info("Use InventoryPage.CountVisibleInventoryItems() method.");
-
+        int visibleItems = _inventoryPage.CountVisibleInventoryItems();
+        
         // Assert
         Assert.That(visibleItems > 0, Is.True, "InventoryList is not displayed or empty.");
         Log.Info("Assert that InventoryPage contains list of inventory items.");
@@ -108,10 +113,9 @@ public class UC2 : BaseTest
     public void ClickingBurgerMenuButton_ShowsSideMenu()
     {
         // Act
-        _inventoryPage.Click(InventoryPage.BurgerMenuButton);
-        bool menuOpened = _inventoryPage.WaitUntilSideMenuIsOpened();
-
         Log.Info("Click on InventoryPage.BurgerMenuButton and use InventoryPage.WaitUntilSideMenuIsOpened() method.");
+        _inventoryPage.Click(InventoryPage.BurgerMenuButton);
+        bool menuOpened = _inventoryPage.WaitUntilSideMenuIsOpened();     
 
         // Assert
         Assert.That(menuOpened, Is.True, "SideMenu is still hidden.");
@@ -123,11 +127,11 @@ public class UC2 : BaseTest
     public void ClickingShoppingCartIcon_OpensCartPage()
     {
         // Act
+        Log.Info("Click onInventoryPage.ShoppingCartIcon, check if CartPage.CheckoutButton is displayed and go back to InventoryPage.");
         _inventoryPage.Click(InventoryPage.ShoppingCartIcon);
         bool result = _inventoryPage.IsDisplayed(CartPage.CheckoutButton);
         _inventoryPage.GoBack();
-        Log.Info("Click onInventoryPage.ShoppingCartIcon, check if CartPage.CheckoutButton is displayed and go back to InventoryPage.");
-
+        
         // Assert
         Assert.That(result, Is.True, "Cart Page was not opened.");
         Log.Info("Assert that clicking ShoppingCartIcon opens CartPage.");
@@ -138,12 +142,11 @@ public class UC2 : BaseTest
     public void SortingAtoZ_SortsInventoryListIn_AZ_Order()
     {
         // Act
+        Log.Info("Use InventoryPage.SortAtoZ() method then order (A-Z) ItemNamesList.");
         _inventoryPage.SortAtoZ();
         var actualList = _inventoryPage.GetItemNamesList();
         var expectedList = actualList.OrderBy(n => n).ToList();
-
-        Log.Info("Use InventoryPage.SortAtoZ() method then order (A-Z) ItemNamesList.");
-
+        
         // Assert
         Assert.That(actualList, Is.EqualTo(expectedList), "A-Z sorting does not work as expected.");
         Log.Info("Assert that A-Z sorting works as expected.");

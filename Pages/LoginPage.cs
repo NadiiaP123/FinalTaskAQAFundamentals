@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using System.Security.Policy;
 
 namespace Pages
 {
@@ -9,7 +10,8 @@ namespace Pages
         public static By UsernameLocator => By.Id("user-name");
         public static By PasswordLocator => By.Id("password");
         public static By LoginButtonLocator => By.Id("login-button");
-        public static By ErrorContainer => By.CssSelector(".error-message-container.error h3");
+        public static By ErrorButton => By.CssSelector("[data-test='error-button']");
+        public static By ErrorMessage => By.CssSelector(".error-message-container.error h3");
 
         public override bool IsOpened()
         {
@@ -26,6 +28,11 @@ namespace Pages
             Type(PasswordLocator, password);
         }
 
+        public void ClearPassword()
+        {
+            ClearInput(PasswordLocator);
+        }
+
         public void ClickLoginButton()
         {
             Click(LoginButtonLocator);
@@ -39,9 +46,15 @@ namespace Pages
             ClickLoginButton();
         }
 
+        public void CloseErrorMessage()
+        {
+            Click(ErrorButton);
+        }
+
+
         public string GetErrorMessage()
         {
-            return IsDisplayed(ErrorContainer) ? GetText(ErrorContainer) : string.Empty;
+            return IsDisplayed(ErrorMessage) ? GetText(ErrorMessage) : string.Empty;
         }
     }
 }

@@ -42,9 +42,10 @@ public class UC3 : BaseTest
         // Act
         Log.Info("Open random inventory item details.");
         _inventoryPage.OpenRandomAvailableInventoryItem();
+        bool actual = _inventoryItemPage.IsOpened();
 
         // Assert
-        Assert.That(_inventoryItemPage.IsOpened(), Is.True, "InventoryItemPage is not opened.");
+        Assert.That(actual, Is.True, "InventoryItemPage is not opened.");
         Log.Info("Assert that clicking any inventory opens a page with details (InventoryItemPage)");
     }
 
@@ -54,9 +55,10 @@ public class UC3 : BaseTest
         // Act
         Log.Info("Open randon inventory and use InventoryItemPage.IsDisplayed(InventoryItemPage.AddToCartButton) method.");
         _inventoryPage.OpenRandomAvailableInventoryItem();
+        bool actual = _inventoryItemPage.IsDisplayed(InventoryItemPage.AddToCartButton);
 
         // Assert
-        Assert.That(_inventoryItemPage.IsDisplayed(InventoryItemPage.AddToCartButton), Is.True, "AddToCartButton is not displayed.");
+        Assert.That(actual, Is.True, "AddToCartButton is not displayed.");
         Log.Info("Assert that AddToCartButton is displayed.");
     }
 
@@ -69,6 +71,7 @@ public class UC3 : BaseTest
         int currentNumber = _inventoryItemPage.CountItemsInCart();
         _inventoryItemPage.AddInventoryToCart();
         int newNumber = _inventoryItemPage.CountItemsInCart();
+
         // Assert
         Assert.That(newNumber == (currentNumber +1), Is.True, $"Current number {currentNumber} and new number {newNumber} are not equal.");
         Log.Info("Assert that adding item to the Cart increases the number by one.");
